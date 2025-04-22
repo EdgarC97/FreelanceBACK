@@ -1,5 +1,14 @@
 {
     "require": {
-        "firebase/php-jwt": "^6.11"
+      "firebase/php-jwt": "^6.11"
+    },
+    "autoload": {
+      "psr-4": {
+        "App\\": "models/",
+        "Controllers\\": "Controllers/",
+        "Config\\": "config/",
+        "Database\\": "Database/"
+      }
     }
-}
+  }
+  
