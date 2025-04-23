@@ -7,12 +7,14 @@ use Database\Database;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-class ProjectController {
+class ProjectController
+{
     private $db;
     private $project;
     private $jwt_config;
 
-    public function __construct() {
+    public function __construct()
+    {
         // Initialize DB connection and project model
         $database = new Database();
         $this->db = $database->getConnection();
@@ -28,7 +30,8 @@ class ProjectController {
         ];
     }
 
-    private function verifyToken() {
+    private function verifyToken()
+    {
         // Extract and validate JWT token from headers
         $headers = apache_request_headers();
         if (!isset($headers['Authorization'])) {
@@ -49,7 +52,8 @@ class ProjectController {
         }
     }
 
-    public function create() {
+    public function create()
+    {
         $user_id = $this->verifyToken();
         $data = json_decode(file_get_contents("php://input"));
 
@@ -63,21 +67,32 @@ class ProjectController {
 
         // Create project in DB
         if ($this->project->create()) {
-            echo json_encode(["message" => "Project created"]);
+            $newId = $this->db->lastInsertId();
+            echo json_encode([
+                "id" => $newId,
+                "title" => $this->project->title,
+                "description" => $this->project->description,
+                "start_date" => $this->project->start_date,
+                "delivery_date" => $this->project->delivery_date,
+                "status" => $this->project->status,
+                "user_id" => $this->project->user_id
+            ]);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Failed to create project"]);
         }
     }
 
-    public function read() {
+    public function read()
+    {
         $user_id = $this->verifyToken();
         // Fetch all projects by user
         $projects = $this->project->read($user_id);
         echo json_encode($projects);
     }
 
-    public function readOne($id) {
+    public function readOne($id)
+    {
         $user_id = $this->verifyToken();
         // Fetch one project by ID and user
         $project = $this->project->readOne($id, $user_id);
@@ -90,7 +105,8 @@ class ProjectController {
         }
     }
 
-    public function update() {
+    public function update()
+    {
         $user_id = $this->verifyToken();
         $data = json_decode(file_get_contents("php://input"));
 
@@ -105,14 +121,18 @@ class ProjectController {
 
         // Update project
         if ($this->project->update()) {
-            echo json_encode(["message" => "Project updated"]);
+            echo json_encode([
+                "message" => "Project updated",
+                "id" => $this->project->id
+            ]);
         } else {
             http_response_code(500);
             echo json_encode(["message" => "Failed to update project"]);
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $user_id = $this->verifyToken();
 
         // Delete project
