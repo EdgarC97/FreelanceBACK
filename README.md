@@ -165,18 +165,3 @@ Allowed types:
 `DELETE /file/{file_id}`
 
 ---
-
-## 🧪 Testing
-
-Use Postman or CURL with your JWT token:
-
-```bash
-curl -X GET http://localhost:8000/projects \
-  -H "Authorization: Bearer YOUR_TOKEN"
-```
-
----
-
-## ✅ License
-
-MIT - Free for personal and commercial use.
