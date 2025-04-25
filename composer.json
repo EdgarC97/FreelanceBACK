@@ -8,7 +8,8 @@
         "App\\": "models/",
         "Controllers\\": "Controllers/",
         "Config\\": "config/",
-        "Database\\": "Database/"
+        "Database\\": "Database/",
+        "Services\\": "Services/"
       }
     }
   }
